@@ -16,22 +16,40 @@ export default function Home() {
       complete: function(results: any) {
         console.log('finished', results.data)
         console.log("Row errors:", results.errors);
-        const payee = results.data
-        // const keys = Object.values(payee)
-        // console.log('keys', keys)
 
-        const radouane = 'Radouane Chihaby';
+        const report = results.data
+        const arr: number[] = [];
+        const radouaneAmount: number[] = [];
+        const strArr: string[] = [];
 
-        const mappedArray = payee.map((obj: any) => {
-        const persons = Object.values(obj)[19]; 
-        // const writer = persons.filter((person: any) => person == radouane);   
-        // console.log('writer', writer);   
-          return {
-              place:  obj.Territory,
-              personName: persons
-          } 
-        });
-        console.log('mappedArray', mappedArray)
+
+        const writerInfo = report.map((obj: any) => {
+
+          const keys = Object.keys(obj); 
+          const writer = Object.values(obj)[19]; 
+          const royaltyAmount = Number(Object.values(obj)[23]);
+          const workPercentage = Number(Object.values(obj)[20]);
+
+          if (writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
+            radouaneAmount.push(royaltyAmount)
+          }
+          console.log('strArr', strArr)
+          console.log('strArr length', strArr.length)
+          
+
+          arr.push(royaltyAmount);
+          // console.log('array', arr);
+          const distributedAmount = Object.values(obj)[26];
+          const total = radouaneAmount.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          console.log('total', total)
+            return {
+                keys,
+                writer,
+                Royalty_Amount: royaltyAmount,
+                Distributed_Amount: distributedAmount
+            } 
+          });
+          // console.log('writerInfo', writerInfo)
       }
     })
   }
