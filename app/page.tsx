@@ -18,30 +18,40 @@ export default function Home() {
         console.log("Row errors:", results.errors);
 
         const report = results.data
-        const arr: number[] = [];
-        const radouaneAmount: number[] = [];
-        const strArr: string[] = [];
-
+        const radArray: number[] = [];
+        const mediArray: number[] = [];
+        const totalArray: number[] = [];
 
         const writerInfo = report.map((obj: any) => {
 
           const keys = Object.keys(obj); 
           const writer = Object.values(obj)[19]; 
-          const royaltyAmount = Number(Object.values(obj)[23]);
-          const workPercentage = Number(Object.values(obj)[20]);
-
-          if (writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
-            radouaneAmount.push(royaltyAmount)
-          }
-          console.log('strArr', strArr)
-          console.log('strArr length', strArr.length)
-          
-
-          arr.push(royaltyAmount);
-          // console.log('array', arr);
+          const royaltyAmount = Number(Object.values(obj)[26]);  
           const distributedAmount = Object.values(obj)[26];
-          const total = radouaneAmount.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
-          console.log('total', total)
+          // const workPercentage = Number(Object.values(obj)[20]);
+
+          // Radouane Share
+          if (writer === "RADOUANE CHIHABY"){
+            radArray.push(royaltyAmount);
+            const radShare = radArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+            console.log('Rad Share', radShare)
+          }
+
+          // Mediterranean Nights Share
+          if (writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
+            mediArray.push(royaltyAmount);
+            const mediShare = mediArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+            console.log('Medi Share', mediShare);
+          } 
+
+
+          // Total Royalty Amount
+          if (writer === "RADOUANE CHIHABY" || writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
+            totalArray.push(royaltyAmount);
+            const totalShare = totalArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+            console.log('Total Share', totalShare);
+          }
+
             return {
                 keys,
                 writer,
@@ -69,6 +79,9 @@ export default function Home() {
         onChange={handleFileUpload}
        >
        </input>
+      </div><br />
+      <div>
+        {/* <label>MN Share</label> */}
       </div>
     </main>
   );
