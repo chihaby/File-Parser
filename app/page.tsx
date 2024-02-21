@@ -4,59 +4,54 @@ import Papa from 'papaparse';
 
 const acceptableFileTypes = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, .tsv';
 
-export default function Home() {
+export default function Home(radShare: string|number) {
+
+  const radArray: number[] = [];
+  const mediArray: number[] = [];
+  const radAmount: number[] = [];
+  const mediAmount: number[] = [];
+  const totalArray: number[] = [];
+
+  console.log('rad share from top', radShare)
 
   const handleFileUpload = (event: any) => {
-
     const csvFile = event.target.files[0];
 
     Papa.parse(csvFile, {
       header: true,
       skipEmptyLines: true,
       complete: function(results: any) {
-        console.log('finished', results.data)
-        console.log("Row errors:", results.errors);
-
-        const report = results.data
-        const radArray: number[] = [];
-        const mediArray: number[] = [];
-        const totalArray: number[] = [];
-
+        const report = results.data;
         const writerInfo = report.map((obj: any) => {
 
           const keys = Object.keys(obj); 
           const writer = Object.values(obj)[19]; 
           const royaltyAmount = Number(Object.values(obj)[26]);  
-          const distributedAmount = Object.values(obj)[26];
-          // const workPercentage = Number(Object.values(obj)[20]);
 
           // Radouane Share
           if (writer === "RADOUANE CHIHABY"){
             radArray.push(royaltyAmount);
-            const radShare = radArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
-            console.log('Rad Share', radShare)
           }
+          const radShare = radArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          console.log('Radouane:', radShare);
 
           // Mediterranean Nights Share
           if (writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
             mediArray.push(royaltyAmount);
-            const mediShare = mediArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
-            console.log('Medi Share', mediShare);
           } 
-
-
+          const mediShare = mediArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          console.log('Mediterranean Nights:', mediShare);
           // Total Royalty Amount
           if (writer === "RADOUANE CHIHABY" || writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
             totalArray.push(royaltyAmount);
-            const totalShare = totalArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
-            console.log('Total Share', totalShare);
           }
+          const totalShare = totalArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          console.log('Total:', totalShare);
 
             return {
                 keys,
                 writer,
                 Royalty_Amount: royaltyAmount,
-                Distributed_Amount: distributedAmount
             } 
           });
           // console.log('writerInfo', writerInfo)
@@ -81,7 +76,8 @@ export default function Home() {
        </input>
       </div><br />
       <div>
-        {/* <label>MN Share</label> */}
+        <p>Oceo: {JSON.stringify(radShare)}</p>
+        <p>MN: {mediAmount}</p>
       </div>
     </main>
   );
