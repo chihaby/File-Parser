@@ -1,18 +1,19 @@
 'use client'
 
 import Papa from 'papaparse';
+import { useState } from 'react';
 
 const acceptableFileTypes = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, .tsv';
 
-export default function Home(radShare: string|number) {
+export default function Home() {
+
+  const [radPortion, setRadPortion] = useState<number>();
+  const [mediPortion, setMediPortion] = useState<number>();
+  const [totalPortion, setTotalPortion] = useState<number>();
 
   const radArray: number[] = [];
   const mediArray: number[] = [];
-  const radAmount: number[] = [];
-  const mediAmount: number[] = [];
   const totalArray: number[] = [];
-
-  console.log('rad share from top', radShare)
 
   const handleFileUpload = (event: any) => {
     const csvFile = event.target.files[0];
@@ -32,7 +33,8 @@ export default function Home(radShare: string|number) {
           if (writer === "RADOUANE CHIHABY"){
             radArray.push(royaltyAmount);
           }
-          const radShare = radArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          const radShare: number = radArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          setRadPortion(Math.round(radShare));
           console.log('Radouane:', radShare);
 
           // Mediterranean Nights Share
@@ -40,12 +42,15 @@ export default function Home(radShare: string|number) {
             mediArray.push(royaltyAmount);
           } 
           const mediShare = mediArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          setMediPortion(Math.round(mediShare))
           console.log('Mediterranean Nights:', mediShare);
+
           // Total Royalty Amount
           if (writer === "RADOUANE CHIHABY" || writer === "RADOUANE CHIHABY|SIMEON PETROV KOKOV"){
             totalArray.push(royaltyAmount);
           }
           const totalShare = totalArray.reduce((accumulator:number, currentValue:number) => accumulator + currentValue, 0);
+          setTotalPortion(Math.round(totalShare));
           console.log('Total:', totalShare);
 
             return {
@@ -76,8 +81,9 @@ export default function Home(radShare: string|number) {
        </input>
       </div><br />
       <div>
-        <p>Oceo: {JSON.stringify(radShare)}</p>
-        <p>MN: {mediAmount}</p>
+        <p>Total: ${totalPortion}</p>
+        <p>Oceo: ${radPortion}</p>
+        <p>MN: ${mediPortion}</p>
       </div>
     </main>
   );
