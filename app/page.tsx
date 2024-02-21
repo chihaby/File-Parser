@@ -11,6 +11,9 @@ export default function Home() {
   const [mediPortion, setMediPortion] = useState<number>();
   const [totalPortion, setTotalPortion] = useState<number>();
 
+  const simeon: number = mediPortion /2;
+  const radouane: number = simeon + radPortion;
+
   const radArray: number[] = [];
   const mediArray: number[] = [];
   const totalArray: number[] = [];
@@ -67,10 +70,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-       <h2>Parser</h2>
-       <label htmlFor='csvFileSelector'>
-        Select File
-       </label>
+       <h2>MLC Report </h2>
        <input
         type='file'
         id='csvFileSelector'
@@ -79,11 +79,13 @@ export default function Home() {
         onChange={handleFileUpload}
        >
        </input>
-      </div><br />
+      </div>
       <div>
         <p>Total: ${totalPortion}</p>
-        <p>Oceo: ${radPortion}</p>
         <p>MN: ${mediPortion}</p>
+        <p>Oceo: ${radPortion}</p>
+        <p>Radouane: ${radouane}</p>
+        <p>Simeon: ${simeon}</p>
       </div>
     </main>
   );
